@@ -14,13 +14,26 @@ export const CartApp = () => {
     const [cartItems, setCartItems] = useState(initialCartItems);
 
     const handlerAddProductCart = (product) => {  //se actualiza el estado del carro
-        setCartItems([...cartItems,
+        
+        const hasItem = cartItems.find((i) => i.product.id === product.id);
+        if(hasItem){
+          setCartItems([
+            ...cartItems.filter((i) => i.product.id !== product.id), //con el filter se quita el producto para agregarlo con la cantidad actualizada
             {
                 product,
-                quantity: 1,
-                total: product.price * 1
+                quantity: hasItem.quantity + 1
             }
-        ])
+          ])
+        }else{
+            setCartItems([...cartItems,
+                {
+                    product,
+                    quantity: 1,
+                }
+            ])
+        }
+        
+       
     }
  
   return (
