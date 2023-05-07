@@ -1,4 +1,4 @@
-export const CartItem = ({name, description, price}) => {
+export const ProductCardView = ({name, description, price}) => {
   return (
     <>
       <div className="card">
