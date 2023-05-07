@@ -1,4 +1,9 @@
-export const CartView = ({ items }) => {
+export const CartView = ({ handlerDelete, items }) => {
+  const onDeleteProduct = (id) => {
+    //console.log("elimino producto");
+    handlerDelete(id); //funcion que viene del padre
+  };
+
   return (
     <>
       <h3>Carro de compras</h3>
@@ -15,14 +20,17 @@ export const CartView = ({ items }) => {
         </thead>
 
         <tbody>
-          {items.map(item => (
-
+          {items.map((item) => (
             <tr key={item.product.id}>
               <td>{item.product.name}</td>
               <td>{item.product.price}</td>
               <td>{item.quantity}</td>
               <td>{item.quantity * item.product.price}</td>
-              <td>Eliminar</td>
+              <td>
+                <button className="btn btn-danger" onClick={() => onDeleteProduct(item.product.id)}>
+                  Eliminar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
