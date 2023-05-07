@@ -17,13 +17,23 @@ export const CartApp = () => {
         
         const hasItem = cartItems.find((i) => i.product.id === product.id);
         if(hasItem){
-          setCartItems([
-            ...cartItems.filter((i) => i.product.id !== product.id), //con el filter se quita el producto para agregarlo con la cantidad actualizada
-            {
-                product,
-                quantity: hasItem.quantity + 1
-            }
-          ])
+        //  setCartItems([
+        //    ...cartItems.filter((i) => i.product.id !== product.id), //con el filter se quita el producto para agregarlo con la cantidad actualizada
+        //    {
+        //        product,
+        //        quantity: hasItem.quantity + 1
+        //    }
+        //  ])
+
+        setCartItems( //el map entrega un nuevo arreglo por lo que no son necesarios los corchetes
+             cartItems.map((i) => {
+                if(i.product.id === product.id) { //preguntamos si el producto existe
+                    i.quantity = i.quantity + 1; //si no existe se actualiza la cantidad
+                }
+                return i; //map siempre devuelve el objeto modificado por lo que debe ir con return
+             }),  //map actualiza, no elimina y actualiza como filter por lo tanto no cambia el orden de los productos al ir agregando
+          )
+
         }else{
             setCartItems([...cartItems,
                 {
