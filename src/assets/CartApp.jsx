@@ -1,54 +1,56 @@
-import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import { CartView } from "../components/CartView";
 import { CatalogView } from "../components/CatalogView";
+import { itemsReducer } from "../reducer/itemsReducer";
 
-const initialCartItems = [
+//aca el getItem me devuelve un string y debo convertirlo a objeto nuevamente
+//con JSON.parse que convierte un string a objeto
+//la primera vez no existe por lo que hay que preguntarle con el operador ternario
+//initialCartItems va a ser esto || si no un arreglo vacio
+const initialCartItems = JSON.parse(sessionStorage.getItem('cart')) || []; //con get obtengo los valores 
+//[
   // {
   //     product: {},
   //      quantity: 0,
   //     total: 0
   //  }
-];
+//];
 export const CartApp = () => {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+ 
+  const [cartItems, dispatch] = useReducer(itemsReducer, initialCartItems);
+
+  useEffect(() => { //cuando hay un cambio en los items se gatilla el use Effect
+    //para guardar el estado mientras la sesion este activa, el segundo parametro debe ser un string
+    //por lo que debo convertir el objeto "items" en string con el metodo de js JSON.stringify
+    //luego hay que inicializarlo en CartApp
+    sessionStorage.setItem('cart',JSON.stringify(cartItems)); //con set modifico los valores
+}, [cartItems]);
 
   const handlerAddProductCart = (product) => {
     //se actualiza el estado del carro
 
     const hasItem = cartItems.find((i) => i.product.id === product.id);
     if (hasItem) {
-      //  setCartItems([
-      //    ...cartItems.filter((i) => i.product.id !== product.id), //con el filter se quita el producto para agregarlo con la cantidad actualizada
-      //    {
-      //        product,
-      //        quantity: hasItem.quantity + 1
-      //    }
-      //  ])
-
-      setCartItems(
-        //el map entrega un nuevo arreglo por lo que no son necesarios los corchetes
-        cartItems.map((i) => {
-          if (i.product.id === product.id) {
-            //preguntamos si el producto existe
-            i.quantity = i.quantity + 1; //si no existe se actualiza la cantidad
-          }
-          return i; //map siempre devuelve el objeto modificado por lo que debe ir con return
-        }) //map actualiza, no elimina y actualiza como filter por lo tanto no cambia el orden de los productos al ir agregando
-      );
-    } else {
-      setCartItems([
-        ...cartItems,
+      dispatch(
         {
-          product,
-          quantity: 1,
-        },
-      ]);
+            type: 'UpdateQuantityProductCart',
+            payload: product,
+        });
+    } else {
+        dispatch(
+            {
+                type: 'AddProductCart',
+                payload: product,
+            });
     }
   };
 
   const handlerDeleteProductCart = (id) => {
     //para eliminar productos de carro
-    setCartItems([...cartItems.filter((i) => i.product.id !== id)]);
+    dispatch({
+        type: 'DeleteProductCart',
+        payload: id,
+    })
   };
 
   return (
