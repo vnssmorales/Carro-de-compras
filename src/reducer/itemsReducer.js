@@ -1,6 +1,8 @@
+import { AddProductCart, DeleteProductCart, UpdateQuantityProductCart } from "./itemActions";
+
 export const itemsReducer = (state = [], action) => {
   switch (action.type) {
-    case "AddProductCart":
+    case AddProductCart:
       return [
         ...state, //el state es el objeto a modificar
         {
@@ -9,7 +11,7 @@ export const itemsReducer = (state = [], action) => {
         },
       ];
 
-    case "UpdateQuantityProductCart":
+    case UpdateQuantityProductCart:
       return  state.map((i) => {
         if (i.product.id === action.payload.id) { //action.payload es el objeto producto mas el id
           //preguntamos si el producto existe
@@ -21,7 +23,7 @@ export const itemsReducer = (state = [], action) => {
         return i; //map siempre devuelve el objeto modificado por lo que debe ir con return
       }) ;
 
-    case "DeleteProductCart":
+    case DeleteProductCart:
       return [...state.filter((i) => i.product.id !== action.payload)];
 
     default:

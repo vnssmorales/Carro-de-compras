@@ -2,6 +2,7 @@ import { useEffect, useReducer } from "react";
 import { CartView } from "../components/CartView";
 import { CatalogView } from "../components/CatalogView";
 import { itemsReducer } from "../reducer/itemsReducer";
+import { AddProductCart, DeleteProductCart, UpdateQuantityProductCart } from "../reducer/itemActions";
 
 //aca el getItem me devuelve un string y debo convertirlo a objeto nuevamente
 //con JSON.parse que convierte un string a objeto
@@ -33,13 +34,13 @@ export const CartApp = () => {
     if (hasItem) {
       dispatch(
         {
-            type: 'UpdateQuantityProductCart',
+            type: UpdateQuantityProductCart,
             payload: product,
         });
     } else {
         dispatch(
             {
-                type: 'AddProductCart',
+                type: AddProductCart,
                 payload: product,
             });
     }
@@ -48,7 +49,7 @@ export const CartApp = () => {
   const handlerDeleteProductCart = (id) => {
     //para eliminar productos de carro
     dispatch({
-        type: 'DeleteProductCart',
+        type: DeleteProductCart,
         payload: id,
     })
   };
