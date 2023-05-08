@@ -1,4 +1,14 @@
+import { useEffect, useState } from "react";
+import { calculateTotal } from "../services/productService";
+
 export const CartView = ({ handlerDelete, items }) => {
+
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => { //cuando hay un cambio en los items se gatilla el use Effect
+        setTotal(calculateTotal(items));  
+    }, [items]);
+
   const onDeleteProduct = (id) => {
     //console.log("elimino producto");
     handlerDelete(id); //funcion que viene del padre
@@ -41,7 +51,7 @@ export const CartView = ({ handlerDelete, items }) => {
               Total
             </td>
             <td colSpan="2" className="text-start fw-bold">
-              12345
+              {total}
             </td>
           </tr>
         </tfoot>
